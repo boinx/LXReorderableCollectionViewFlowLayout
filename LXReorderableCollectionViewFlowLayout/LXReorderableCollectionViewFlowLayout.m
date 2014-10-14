@@ -352,12 +352,15 @@ static NSString * const kLXCollectionViewKeyPath = @"collectionView";
                      if (strongSelf) {
 						 [strongSelf invalidateLayout];
 						 dispatch_async(dispatch_get_main_queue(), ^{
-							 [strongSelf.currentView removeFromSuperview];
-							 strongSelf.currentView = nil;
-							 
+
 							 if ([strongSelf.delegate respondsToSelector:@selector(collectionView:layout:didEndDraggingItemAtIndexPath:)]) {
 								 [strongSelf.delegate collectionView:strongSelf.collectionView layout:strongSelf didEndDraggingItemAtIndexPath:currentIndexPath];
 							 }
+							 dispatch_async(dispatch_get_main_queue(), ^{
+								 [strongSelf.currentView removeFromSuperview];
+								 strongSelf.currentView = nil;
+							 });
+
 						 });
                      }
                  }];
